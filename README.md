@@ -27,6 +27,17 @@ Applying split and hinge cuts to all interior edges based on the orientation of 
 
 ### Uniform deployability
 
+A kirigami structure is **uniformly deployable** if all hinge-cut edges open by the same angle $\theta$ during deployment, and all faces remain rigid. This property is governed by the geometry of *holes*, i.e., empty regions that emerge after cutting. We first define key concepts that connect the original tiling `M` to the kirigami structure `M'` after cutting:
+
+**Definition 4.1 (Holes in `M'`).** A *hole* in the kirigami structure `M'` is a connected component of the complement of `M'` in the plane, whose boundary is a simple closed cycle composed of duplicated interior edges and hinge vertices introduced by the cutting process.
+
+**Definition 4.2 (Hole preimage in `M`).** For an interior edge $e$ in the original mesh `M`, let `e'` in `M'` be one of its duplicates after cutting. The *hole preimage* `C_e` is the set of interior edges in `M` whose corresponding edges in `M'` collectively form the boundary of the hole `H_{e'}`.
+
+Intuitively, a hole preimage tells us which edges in the original uncut tiling contribute to the same hole after cutting. For each hole preimage $C$, uniform deployability requires:
+
+$$\sum_{\vec{e} \in C \cap \mathcal{E}_{\mathrm{hinge}}} \vec{e} = \vec{0}$$
+
+This vector sum condition is **linear** in the edge vectors, meaning the set of valid embeddings forms a linear subspace — the space of ***Tutte auxetic embeddings***.
 ### Shape space exploration
 
 ## Implementation
