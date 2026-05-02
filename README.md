@@ -10,10 +10,35 @@ In this project, we introduce a general analytical framework for designing unifo
 More details about our paper can be found at:  [[web demo]]() | [[project page]]() | [[paper]]() | [[suppl. video]]()
 
 ## Methodology
+We represent a planar graph as a 2D tiling/mesh `M = (X, F)` where the face list `F` encodes the graph combinatorics and `X` is a planar straight-line embedding (as we assume the graph is planar). We aim to answer the following questions:
+1. How to formulate cut operations that transform a planar tiling into a kirigami structure?
+2. What geometric conditions ensure uniform deployability of the resulting structure?
+3. How to characterize the full space of embeddings that satisfy these conditions?
+
+### Cut operations
+We use face orientations to define cut operations. 
+Specifically, a face-orientation assignment assigns clockwise (colored blue) or counterclockwise (color pink) orientation to each face. This orientation determines how adjacent faces are cut (which can be categorized as split cuts and hinge cuts). See illustration below:
+
 | Figure 1: split cut | Figure 2: hinge cut |
 |:--------------------------:|:--------------------------:|
-| <img src="./figs/eg_split_cut.jpg" alt="split cut" width="500"/> | <img src="./figs/eg_hinge_cut.jpg" alt="hinge cut" width="500"/> |
+| <img src="./figs/eg_split_cut.png" alt="split cut" width="500"/> | <img src="./figs/eg_hinge_cut.png" alt="hinge cut" width="500"/> |
 
+Applying split and hinge cuts to all interior edges based on the orientation of the adjacent faces yields a hinged kirigami structure.
+
+### Uniform deployability
+
+A kirigami structure is **uniformly deployable** if all hinge-cut edges open by the same angle $\theta$ during deployment, and all faces remain rigid. This property is governed by the geometry of *holes*, i.e., empty regions that emerge after cutting. We first define key concepts that connect the original tiling `M` to the kirigami structure `M'` after cutting:
+
+**Definition 4.1 (Holes in `M'`).** A *hole* in the kirigami structure `M'` is a connected component of the complement of `M'` in the plane, whose boundary is a simple closed cycle composed of duplicated interior edges and hinge vertices introduced by the cutting process.
+
+**Definition 4.2 (Hole preimage in `M`).** For an interior edge $e$ in the original mesh `M`, let `e'` in `M'` be one of its duplicates after cutting. The *hole preimage* `C_e` is the set of interior edges in `M` whose corresponding edges in `M'` collectively form the boundary of the hole `H_{e'}`.
+
+Intuitively, a hole preimage tells us which edges in the original uncut tiling contribute to the same hole after cutting. For each hole preimage $C$, uniform deployability requires:
+
+$$\sum_{\vec{e} \in C \cap \mathcal{E}_{\mathrm{hinge}}} \vec{e} = \vec{0}$$
+
+This vector sum condition is **linear** in the edge vectors, meaning the set of valid embeddings forms a linear subspace — the space of ***Tutte auxetic embeddings***.
+### Shape space exploration
 
 ## Implementation
 We provide an interactive **web‑based user interface** with the following functionalities:
