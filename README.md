@@ -29,28 +29,13 @@ Applying split and hinge cuts to all interior edges based on the orientation of 
 
 A kirigami structure is **uniformly deployable** if all hinge-cut edges open by the same angle $\theta$ during deployment, and all faces remain rigid. This property is governed by the geometry of *holes*, i.e., empty regions that emerge after cutting. We first define key concepts that connect the original tiling `M` to the kirigami structure `M'` after cutting:
 
-<table style="width: 100%; border: none; border-collapse: collapse;">
-  <tr>
-    <td style="width: 50%; vertical-align: top; border: none; padding: 10px;">
-      <strong>Definition 4.1 (Holes in <code>M'</code>).</strong>
-      <br><br>
-      A <em>hole</em> in the kirigami structure <code>M'</code> is a connected component of the complement of <code>M'</code> in the plane, whose boundary is a simple closed cycle composed of duplicated interior edges and hinge vertices introduced by the cutting process.
-    </td>
-    <td style="width: 50%; text-align: center; vertical-align: middle; border: none; padding: 10px;">
-      <img src="./figs/def_hole.png" style="width: 100%; max-width: 400px; height: auto;">
-    </td>
-  </tr>
-  <tr>
-    <td style="width: 50%; vertical-align: top; border: none; padding: 10px;">
-      <strong>Definition 4.2 (Hole preimage in <code>M</code>).</strong>
-      <br><br>
-      For an interior edge <code>e</code> in the original mesh <code>M</code>, let <code>e'</code> in <code>M'</code> be one of its duplicates after cutting. The <em>hole preimage</em> <code>C<sub>e</sub></code> is the set of interior edges in <code>M</code> whose corresponding edges in <code>M'</code> collectively form the boundary of the hole <code>H<sub>e'</sub></code>.
-    </td>
-    <td style="width: 50%; text-align: center; vertical-align: middle; border: none; padding: 10px;">
-      <img src="./figs/def_hole_preimage.png" style="width: 100%; max-width: 400px; height: auto;">
-     </td>
-   </tr>
-</table>
+**Definition 4.1 (Holes in `M'`).** A *hole* in the kirigami structure `M'` is a connected component of the complement of `M'` in the plane, whose boundary is a simple closed cycle composed of duplicated interior edges and hinge vertices introduced by the cutting process.
+
+**Definition 4.2 (Hole preimage in `M`).** For an interior edge `e` in the original mesh `M`, let `e'` in `M'` be one of its duplicates after cutting. The *hole preimage* `C_e` is the set of interior edges in `M` whose corresponding edges in `M'` collectively form the boundary of the hole `H_{e'}`.
+
+| a hole in `M'` | its hole preimage in `M` |
+|:-------------:|:--------------------:|
+| <img src="./figs/def_hole.png" width="350"> | <img src="./figs/def_hole_preimage.png" width="350"> |
 
 Intuitively, a hole preimage tells us which edges in the original uncut tiling contribute to the same hole after cutting. For each hole preimage $C$, uniform deployability requires:
 
