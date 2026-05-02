@@ -53,14 +53,26 @@ Please refer to our paper for more discussions and the proof.
 This vector sum condition is **linear** in the edge vectors, meaning the set of valid embeddings forms a linear subspace — the space of ***Tutte auxetic embeddings***.
 
 ### Shape space exploration
+The linear system defining Tutte auxetic embeddings can be expressed as:
+
+$$\mathbf{L} \mathbf{X} = \mathbf{0}$$
+
+where $\mathbf{L}$ encodes hole constraints (defined above) and boundary conditions (e.g., fixed to predefined positions or constrained to be periodic). When the system is rank-deficient, its **null space** reveals a multi-dimensional shape space of valid embeddings (i.e., embeddings that are uniformly deployable). In such cases, we can further solve for patterns with additional constraints, such as requiring the resulting kirigami pattern to exhibit conformal behavior during deployment or to be fully closed (gap-free) at the maximum deployment angle.
 
 <div align="center">
 
 | pattern optimization: conformal deployment | pattern optimization: fully closed at max-angle deployment|
 |:-------------:|:--------------------:|
-| <img src="./figs/res_conformal.png" width="400"> | <img src="./figs/res_fully_close.png" width="400"> |
-| inverse design: example 01 | inverse design: example 01 |
-| <img src="./figs/res_inverse_2.png" width="400"> | <img src="./figs/res_inverse_1.png" width="400"> |
+| <img src="./figs/res_conformal.png" width="500"> | <img src="./figs/res_fully_close.png" width="500"> |
+
+</div>
+
+### Inverse design
+<div align="center">
+  
+| **inverse design: example 01**| **inverse design: example 02** |
+|:-------------:|:--------------------:|
+| <img src="./figs/res_inverse_2.png" width="500"> | <img src="./figs/res_inverse_1.png" width="500"> |
 
 </div>
 
