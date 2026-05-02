@@ -10,10 +10,24 @@ In this project, we introduce a general analytical framework for designing unifo
 More details about our paper can be found at:  [[web demo]]() | [[project page]]() | [[paper]]() | [[suppl. video]]()
 
 ## Methodology
+We represent a planar graph as a 2D tiling/mesh `M = (X, F)` where the face list `F` encodes the graph combinatorics and `X` is a planar straight-line embedding (as we assume the graph is planar). We aim to answer the following questions:
+1. How to formulate cut operations that transform a planar tiling into a kirigami structure?
+2. What geometric conditions ensure uniform deployability of the resulting structure?
+3. How to characterize the full space of embeddings that satisfy these conditions?
+
+### Cut operations
+We use face orientations to define cut operations. 
+Specifically, a face-orientation assignment assigns clockwise (colored blue) or counterclockwise (color pink) orientation to each face. This orientation determines how adjacent faces are cut (which can be categorized as split cuts and hinge cuts). See illustration below:
+
 | Figure 1: split cut | Figure 2: hinge cut |
 |:--------------------------:|:--------------------------:|
-| <img src="./figs/eg_split_cut.jpg" alt="split cut" width="500"/> | <img src="./figs/eg_hinge_cut.jpg" alt="hinge cut" width="500"/> |
+| <img src="./figs/eg_split_cut.png" alt="split cut" width="500"/> | <img src="./figs/eg_hinge_cut.png" alt="hinge cut" width="500"/> |
 
+Applying split and hinge cuts to all interior edges based on the orientation of the adjacent faces yields a hinged kirigami structure.
+
+### Uniform deployability
+
+### Shape space exploration
 
 ## Implementation
 We provide an interactive **web‑based user interface** with the following functionalities:
