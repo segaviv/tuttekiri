@@ -33,10 +33,13 @@ A kirigami structure is **uniformly deployable** if all hinge-cut edges open by 
 
 **Definition 4.2 (Hole preimage in `M`).** For an interior edge `e` in the original mesh `M`, let `e'` in `M'` be one of its duplicates after cutting. The *hole preimage* `C_e` is the set of interior edges in `M` whose corresponding edges in `M'` collectively form the boundary of the hole `H_{e'}`.
 
+<div align="center">
+  
 | a hole in `M'` | its hole preimage in `M` |
 |:-------------:|:--------------------:|
-| <img src="./figs/def_hole.png" width="350"> | <img src="./figs/def_hole_preimage.png" width="350"> |
+| <img src="./figs/def_hole.png" width="200"> | <img src="./figs/def_hole_preimage.png" width="200"> |
 
+</div>
 Intuitively, a hole preimage tells us which edges in the original uncut tiling contribute to the same hole after cutting. For each hole preimage $C$, uniform deployability requires:
 
 $$\sum_{\vec{e} \in C \cap \mathcal{E}_{\mathrm{hinge}}} \vec{e} = \vec{0}$$
