@@ -77,22 +77,20 @@ where $\mathbf{L}$ encodes hole constraints (defined above) and boundary conditi
 </div>
 
 ## Implementation
-We provide an interactive **web‑based user interface** with the following functionalities:
-
+We provide an interactive **web‑based user interface** for pattern optimizationa and inverse design. Please see the [supplementary video](https://youtu.be/lAtOGjTt69o) for interactive demonstrations. 
 
 Key features:
-- **Load & Orient** – Load any planar graph (3‑connected). Automatic face‑orientation assignment via dual‑graph max‑cut approximation (Sec. 4.2). Manual orientation flipping by clicking faces.
-- **Tutte Auxetic Embedding** – Compute the closest uniformly deployable embedding from a non‑deployable input (Eq. 6). Visualize real‑time deployment simulation.
-- **Shape Space Exploration** – Adjust sliders to navigate the full null‑space of deployable embeddings (Sec. 4.4). The pattern updates while remaining uniformly deployable.
-- **Specialized Optimization** – 
-  - *Isotropic patterns*: conformal deployment (Poisson ratio −1) via Eq. (13).
-  - *Fully‑closed patterns*: two gap‑free configurations (initial + maximally deployed) via Eq. (14).
-  - *Collision handling*: optimize within the shape space to avoid early self‑intersection (Sec. 4.5).
-- **Curved Cuts** – Draw custom curves for hinge edges (monotonic distance condition, Sec. 4.6); pattern updates while preserving deployability.
-- **Inverse Design** – Load a disk‑topology mesh; the system finds a uniformly deployable pattern whose deployment (at a given $\theta$) approximates the target shape. *Preserves exact topology* of the input (no remeshing required, Sec. 5.3).
+- Load a planar graph (default data folder: `data/unit_patterns/`) and automatically assign face orientations. 
+- Interactively flip face orientations by clicking on faces.
+- Compute the full design space and update a non-uniformly deployable pattern to its closest Tutte auxetic embedding.
+- Adjust the coefficients of the basis vectors using sliders; the pattern updates in real time while remaining uniformly deployable.
+- Simulate the deployment process with automatic detection of the deployment range.
+- Solve for Tutte auxetic embeddings that are isotropic or fully-closed after deployment, with automatic collision handling.
+- Draw custom curves and assign them to selected cut edges; the pattern updates with curved cuts.
+- Load a disk-topology mesh and perform inverse design using the selected pattern.
 
 Please refer to our paper for technical details. Full implementation can be found in the folder `web_demo`.  
-Pre‑optimized patterns for various shapes (hemisphere, half‑torus, bunny, etc.) are provided in `fabrication_patterns`. These patterns can be laser‑cut from paper, felt, or other sheet materials.
+Pre‑optimized patterns for various shapes are provided in `fabricable_results`. These patterns can be laser‑cut from paper, felt, or other sheet materials.
 
 ## Acknowledgements
 The authors thank the anonymous reviewers for their valuable feedback.  Special thanks to **James MacCann** for insightful comments, and to **Ruben Wiersma**, **Marcel Padilla**, and **Peizhuo Li** for proofreading.  The authors thank all **IGL members** for their spiritual‑academic‑snacky support.  This work was supported in part by the **ERC Consolidator Grant No. 101003104 (MYCLOTH)**.
