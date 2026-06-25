@@ -1,0 +1,295 @@
+:root {
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --bg-color: #0f0f11;
+  --text-color: #ffffff;
+  --accent-color: #646cff;
+  /* Vite purple, decent start */
+  --accent-hover: #7b83ff;
+  --panel-bg: rgba(30, 30, 35, 0.7);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  overflow: hidden;
+  /* Prevent scroll */
+  width: 100vw;
+  height: 100vh;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* Canvas fills the screen */
+#canvas {
+  width: 100% !important;
+  /* Force correct sizing handled by JS */
+  height: 100% !important;
+  display: block;
+}
+
+/* UI Container - Floating Overlay */
+#ui-container {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  width: 320px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  pointer-events: none;
+  /* Let clicks pass through to canvas where empty */
+}
+
+/* Enable pointer events on interactive children */
+#ui-container>* {
+  pointer-events: auto;
+}
+
+header {
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--glass-shadow);
+}
+
+header h1 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  background: linear-gradient(90deg, #fff, #aaa);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+header p {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.controls-panel {
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: var(--glass-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border-color);
+  width: 100%;
+}
+
+/* Buttons */
+button,
+.btn-primary {
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  background: var(--accent-color);
+  color: white;
+  padding: 10px 16px;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(100, 108, 255, 0.3);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ddd;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.btn-icon {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ddd;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.btn-icon:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.file-name {
+  font-size: 0.8rem;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+/* Custom File Input */
+input[type="file"] {
+  display: none;
+}
+
+.upload-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 2px dashed var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.upload-box.drag-over {
+  background: rgba(100, 108, 255, 0.1);
+  border-color: var(--accent-color);
+}
+
+.upload-hint {
+  font-size: 0.75rem;
+  color: #888;
+  text-align: center;
+  margin-top: -4px;
+}
+
+.edge-curves-help, .unit-parallelogram-help, .mtl-help,
+.mesh-to-pattern-help {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #bbb;
+  font-size: 0.7rem;
+  line-height: 1;
+  cursor: inherit;
+  flex: 0 0 auto;
+}
+
+.edge-curves-help-tooltip, .unit-parallelogram-help-tooltip, .mtl-help-tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 280px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(20, 20, 24, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  color: #e6e6e6;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  font-weight: 400;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.mesh-to-pattern-help-tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 280px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(20, 20, 24, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  color: #e6e6e6;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  font-weight: 400;
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.edge-curves-help:hover .edge-curves-help-tooltip,
+.edge-curves-help:focus-within .edge-curves-help-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.unit-parallelogram-help:hover .unit-parallelogram-help-tooltip,
+.unit-parallelogram-help:focus-within .unit-parallelogram-help-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mtl-help:hover .mtl-help-tooltip,
+.mtl-help:focus-within .mtl-help-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mesh-to-pattern-help:hover .mesh-to-pattern-help-tooltip,
+.mesh-to-pattern-help:focus-within .mesh-to-pattern-help-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
