@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uniformly deployable kirigami patterns</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="https://segaviv.github.io/tuttekiri/assets/index-lVnQiJu7.js"></script>
+  <link rel="stylesheet" crossorigin href="https://segaviv.github.io/tuttekiri/assets/index-DngHAgLY.css">
+</head>
+
+<body>
+  <div id="app">
+    <div id="ui-container">
+
+      <details class="controls-panel" open style="max-height: 90vh; overflow-y: auto;">
+        <summary style="font-weight: 600; cursor: pointer; user-select: none; margin-bottom: 8px;">Controls</summary>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div id="upload-drop-zone" class="upload-box">
+            <div class="upload-hint">Drag & drop .OBJ, .MKL, .json or .UKP here</div>
+          </div>
+
+          <details id="pattern-selector" style="width: 100%; margin-top: 8px;">
+            <summary style="font-size: 0.8rem; cursor: pointer; user-select: none; margin-bottom: 8px;">Load Pattern
+            </summary>
+            <div id="pattern-list" class="control-group"
+              style="flex-direction: column; align-items: flex-start; gap: 4px; max-height: 200px; overflow-y: auto; margin-left: 16px;">
+              <!-- Patterns will be injected here -->
+            </div>
+          </details>
+
+          <div class="control-group" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+            <!-- Render Mode Selection -->
+            <div style="display: flex; justify-content: space-between; width:100%; margin-bottom: 8px;">
+              <label style="font-size: 0.8rem; cursor: pointer;">
+                <input type="radio" name="render-mode" value="repetition"> Repetitions
+              </label>
+              <label style="font-size: 0.8rem; cursor: pointer;">
+                <input type="radio" name="render-mode" value="bbox" checked> Bounding Box
+              </label>
+              <label style="font-size: 0.8rem; cursor: pointer;">
+                <input type="radio" name="render-mode" value="circle"> Circle
+              </label>
+            </div>
+
+            <!-- Repetition Controls (Shown when render-mode is 'repetition') -->
+            <div id="repetition-controls" style="display: none; flex-direction: column; gap: 8px; width: 100%;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.8rem; width: 60px;">Rep X:</span>
+                <input type="range" id="rep-x" min="1" max="20" value="1" />
+                <span id="rep-x-val" style="font-size: 0.8rem;">1</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.8rem; width: 60px;">Rep Y:</span>
+                <input type="range" id="rep-y" min="1" max="20" value="1" />
+                <span id="rep-y-val" style="font-size: 0.8rem;">1</span>
+              </div>
+            </div>
+
+            <!-- Bounding Box Controls (Shown when render-mode is 'bbox') -->
+            <div id="bbox-controls" style="display: flex; flex-direction: row; gap: 8px; width: 100%;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.8rem; width: 60px;">Width:</span>
+                <input type="number" id="bbox-width" value="20" step="1"
+                  style="width: 60px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.8rem; width: 60px;">Height:</span>
+                <input type="number" id="bbox-height" value="20" step="1"
+                  style="width: 60px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+              </div>
+            </div>
+
+            <!-- Circle Controls (Shown when render-mode is 'circle') -->
+            <div id="circle-controls" style="display: none; flex-direction: column; gap: 8px; width: 100%;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.8rem; width: 60px;">Radius:</span>
+                <input type="number" id="circle-radius" value="10" step="0.1"
+                  style="width: 60px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.8rem; width: 60px;">Shift X:</span>
+                <input type="number" id="circle-shift-x" value="0" step="0.1"
+                  style="width: 60px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+                <span style="font-size: 0.8rem; width: 60px;">Shift Y:</span>
+                <input type="number" id="circle-shift-y" value="0" step="0.1"
+                  style="width: 60px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+              </div>
+            </div>
+
+            <!-- Divider -->
+            <div style="height: 1px; background: rgba(255,255,255,0.1); width: 100%; margin: 8px 0;"></div>
+
+            <!-- Deployment Angle (Always Visible) -->
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+              <span style="font-size: 0.8rem; width: 60px;">Deploy {</span>
+              <input type="range" id="deploy-angle" min="0" max="360" value="0" />
+              <input type="number" id="deploy-angle-val" value="0" step="1"
+                style="width: 60px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+              <!-- <span id="deploy-angle-val" style="font-size: 0.8rem;">0</span> -->
+              <span style="font-size: 0.8rem;">}</span>
+            </div>
+            <label
+              style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; cursor: pointer; margin-top: 4px;">
+              <input type="checkbox" id="chk-detect-collisions" />
+              Detect Collisions
+            </label>
+          </div>
+          <details open>
+            <summary style="font-size: 0.8rem; cursor: pointer; user-select: none; margin-bottom: 12px;">Optimize unit
+              pattern
+            </summary>
+            <div class="control-group" style="flex-wrap: wrap; margin-left: 8px;">
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <button id="btn-test-make-deployable" class="btn-secondary" title="Make Deployable"
+                  style="margin-right: 8px;">
+                  Deployize
+                </button>
+                <input type="checkbox" id="chk-map-to-unit-disk" title="Map to Unit Disk">
+                <label for="chk-map-to-unit-disk" style="font-size: 0.8rem;">Map to Unit Disk</label>
+              </div>
+              <div class="divider"></div>
+              <button id="btn-optimize-fully-closed" class="btn-secondary" title="Optimize Fully Closed">
+                Fully Closed
+              </button>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <button id="btn-conformalize" class="btn-secondary" title="Conformalize">
+                  Conformalize
+                </button>
+              </div>
+              <div class="divider"></div>
+              <button id="btn-prevent-intersections" class="btn-secondary" title="Prevent Intersections">
+                Prevent Intersections
+              </button>
+              <details close style="margin-top: 8px; margin-left: 8px;">
+                <summary style="font-size: 0.8rem; cursor: pointer; user-select: none; margin-bottom: 12px;">Prevent
+                  Intersections Parameters
+                </summary>
+                <!-- Barrier Parameters -->
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0px;">
+                  <span style="font-size: 0.8rem; width: 60px;">Barrier:</span>
+                  <input type="range" id="barrier" min="0" max="1" value="0.1" step="0.01" />
+                  <input type="number" id="barrier-val" value="0.1" step="0.01"
+                    style="width: 50px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+                </div>
+                <!-- Barrier Strength Parameters -->
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0px;">
+                  <span style="font-size: 0.8rem; width: 60px;">Strength:</span>
+                  <input type="range" id="barrier-strength" min="1" max="100" value="10" step="1" />
+                  <input type="number" id="barrier-strength-val" value="10" step="1"
+                    style="width: 50px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+                </div>
+                <!-- Close to Original Weight Parameters -->
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0px;">
+                  <span style="font-size: 0.8rem; width: 60px;">Close to original:</span>
+                  <input type="range" id="close-to-original" min="0" max="1" value="0.1" step="0.01" />
+                  <input type="number" id="close-to-original-val" value="0.1" step="0.01"
+                    style="width: 50px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+                </div>
+              </details>
+            </div>
+          </details>
+
+          <div id="kernel-controls" class="control-group"
+            style="flex-direction: column; display: none; align-items: flex-start; gap: 8px;">
+            <!-- Kernel sliders will be injected here -->
+          </div>
+
+          <div id="periodicity-controls" class="control-group"
+            style="flex-direction: column; align-items: flex-start; gap: 8px;">
+            <!-- Periodicity inputs will be injected here -->
+          </div>
+          <!-- Modify unit pattern -->
+          <details>
+            <summary style="font-size: 0.8rem; cursor: pointer; user-select: none; margin-bottom: 12px;">Modify unit
+              pattern
+            </summary>
+            <div class="control-group" style="flex-wrap: wrap;">
+              <button id="btn-replicate-2x2" class="btn-secondary" title="Replicate Mesh 2x2">
+                Rep2x2
+              </button>
+              <button id="btn-dual" class="btn-secondary" title="Dualize">
+                Dual
+              </button>
+              <button id="btn-make-non-periodic" class="btn-secondary" title="Make Non-Periodic">
+                Unperiodize
+              </button>
+            </div>
+          </details>
+          <!-- End modify unit pattern -->
+          <!-- Optimize unit pattern -->
+
+          <details id="export-details">
+            <summary
+              style="font-size: 0.8rem; font-weight: 600; cursor: pointer; user-select: none; margin-bottom: 8px;">
+              Export</summary>
+            <div class="control-group" style="margin-left: 8px;">
+              <button id="btn-export-obj" class="btn-secondary" title="Export current view to OBJ">
+                OBJ
+              </button>
+              <button id="btn-export-ukp" class="btn-secondary" title="Export unit pattern to UKP">
+                UKP
+              </button>
+            </div>
+
+
+            <div class="control-group" style="margin-top: 16px; margin-left: 8px;">
+              <div class="divider"></div>
+            </div>
+            <div class="control-group" style="margin-top: 16px; margin-left: 8px;">
+              <button id="btn-export-svg" class="btn-secondary" title="Export unit pattern to SVG">
+                laser cut SVG
+              </button>
+            </div>
+            <div class="control-group" style="margin-top: 16px; margin-left: 8px;">
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px; width: 100%;">
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                  <span style="font-size: 0.8rem; width: 120px;">Average edge size (mm):</span>
+                  <input type="range" id="svg-average-edge-size" min="1" max="200" step="1" value="40" style="flex: 1;">
+                  <input type="number" id="svg-average-edge-size-val" min="1" max="200" step="1" value="40"
+                    style="width: 64px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                  <span style="font-size: 0.8rem; width: 120px;">Hinge size (mm):</span>
+                  <input type="range" id="svg-hinge-size" min="0" max="20" step="0.1" value="2" style="flex: 1;">
+                  <input type="number" id="svg-hinge-size-val" min="0" max="20" step="0.1" value="2"
+                    style="width: 64px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+                </div>
+              </div>
+            </div>
+            <div class="control-group" style="margin-top: 16px; margin-left: 8px;">
+              <div class="divider"></div>
+            </div>
+
+
+
+          </details>
+          <div class="control-group" style="margin-top: 16px; margin-left: 8px;">
+            <button id="btn-save-state" class="btn-secondary" title="Save current state to JSON">
+              Save State
+            </button>
+            <button id="btn-load-state" class="btn-secondary" title="Load state from JSON">
+              Load State
+            </button>
+            <input type="file" id="file-load-state" accept=".json" style="display: none;" />
+          </div>
+
+          <div class="control-group" style="flex-wrap: wrap; display: none;">
+            <button id="btn-deploy-unit-with-holes" class="btn-secondary" style="display: none;"
+              title="Deploy unit with holes">
+              Deploy holes
+            </button>
+          </div>
+
+          <div class="control-group" style="flex-wrap: wrap; display: none;">
+            <button id="btn-find-colorings" class="btn-secondary" title="Find good colorings">
+              Colorings
+            </button>
+          </div>
+          <!-- Coloring Selector -->
+          <div id="coloring-controls" class="control-group"
+            style="display: none; flex-direction: column; align-items: flex-start; gap: 8px;">
+            <!-- Coloring options will be injected here -->
+          </div>
+
+          <div class="control-group">
+            <button id="btn-restore-unit-pattern" class="btn-secondary" title="Restore unit pattern"
+              style="display: none;">
+              Restore Unit
+            </button>
+
+          </div>
+
+
+          <div class="control-group" style="display: none;">
+            <label style="display: none; align-items: center; gap: 8px; font-size: 0.8rem; cursor: pointer;">
+              <input type="checkbox" id="chk-show-indices" />
+              Indices
+            </label>
+            <label style="display: none; align-items: center; gap: 8px; font-size: 0.8rem; cursor: pointer;">
+              <input type="checkbox" id="chk-enable-third-color" />
+              3rd Color
+            </label>
+            <!-- Change display to enable the option -->
+            <label style="display: none; align-items: center; gap: 8px; font-size: 0.8rem; cursor: pointer;">
+              <input type="checkbox" id="chk-show-base-mesh" />
+              Show Base Mesh
+            </label>
+          </div>
+
+          <div class="control-group" style="display: none;">
+            <button id="btn-zoom-in" class="btn-icon" title="Zoom In">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="11" y1="8" x2="11" y2="14"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+            </button>
+            <button id="btn-zoom-out" class="btn-icon" title="Zoom Out">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+            </button>
+            <button id="btn-reset" class="btn-secondary" title="Reset View">
+              Reset View
+            </button>
+          </div>
+        </div>
+      </details>
+    </div>
+    <div id="view-parameter-container"
+      style="position: absolute; top: 24px; left: 360px; width: 250px; z-index: 10; display: flex; flex-direction: column; gap: 16px; pointer-events: none;">
+      <div class="controls-panel" style="pointer-events: auto;">
+        <details id="view-parameters-details" open>
+          <summary
+            style="font-size: 0.8rem; font-weight: 600; cursor: pointer; user-select: none; margin-bottom: 12px;">
+            View Parameters</summary>
+
+          <details id="mtl-details" style="margin-top: 8px; margin-left: 8px;">
+            <summary
+              style="font-size: 0.8rem; font-weight: 600; cursor: pointer; user-select: none; margin-bottom: 8px;">
+              <span
+                style="display: inline-flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; flex: 1;">
+                <span>MTL configuration</span>
+                <span class="mtl-help" aria-label="MTL help">
+                  ?
+                  <span class="mtl-help-tooltip">
+                    Load an OBJ and a corresponding MTL file to apply the MTL materials to the mesh. Adjust the
+                    brightness and mix to control the appearance.
+                  </span>
+                </span>
+              </span>
+            </summary>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-left: 16px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 0.8rem;">MTL Brightness:</span>
+                <input type="range" id="mtl-brightness" min="0" max="2" step="0.05" value="1" style="width: 80px;"
+                  title="Brightness multiplier">
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 0.8rem;">MTL Mix:</span>
+                <input type="range" id="mtl-interpolation" min="0" max="1" step="0.05" value="1" style="width: 80px;"
+                  title="0 = Default, 1 = MTL">
+              </div>
+            </div>
+          </details>
+
+
+          <details id="unit-parallelogram-details" style="margin-top: 8px; margin-left: 8px;">
+            <summary
+              style="font-size: 0.8rem; font-weight: 600; cursor: pointer; user-select: none; margin-bottom: 8px;">
+              <span
+                style="display: inline-flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; flex: 1;">
+                <span>Unit Parallelogram</span>
+                <span class="unit-parallelogram-help" aria-label="Unit Parallelogram help">
+                  ?
+                  <span class="unit-parallelogram-help-tooltip">
+                    Shows a parallelogram indicating the translation symmetry of the pattern, and a circle indicating
+                    the stretch during deployment.
+                  </span>
+                </span>
+              </span>
+            </summary>
+            <div class="control-group" style="margin-left: 16px;">
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; cursor: pointer;">
+                <input type="checkbox" id="chk-show-unit-parallelogram" />
+                Show
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; cursor: pointer;">
+                <input type="checkbox" id="chk-align-unit-parallelogram" />
+                Align
+              </label>
+            </div>
+
+          </details>
+          <!-- Edge Curves -->
+          <details id="edge-curves-details" style="margin-top: 8px; margin-left: 8px;">
+            <summary
+              style="font-size: 0.8rem; font-weight: 600; cursor: pointer; user-select: none; margin-bottom: 8px;">
+              <span
+                style="display: inline-flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; flex: 1;">
+                <span>Edge Curves</span>
+                <span class="edge-curves-help" aria-label="Edge Curves help">
+                  ?
+                  <span class="edge-curves-help-tooltip">
+                    Click Add Style to create a curve, adjust the Bezier curve, select the style, click Apply to Edge,
+                    then click an edge to apply it. Repeating the clicks changes the direction and can flip the curve or
+                    remove it.
+                  </span>
+                </span>
+              </span>
+            </summary>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div id="edge-curves-list"
+                style="display: flex; flex-direction: column; gap: 4px; max-height: 150px; overflow-y: auto;">
+                <!-- Edge curves list -->
+              </div>
+              <button id="btn-add-edge-curve" class="btn-secondary" style="font-size: 0.8rem;">
+                + Add Style
+              </button>
+              <button id="btn-edit-edge-curve" class="btn-secondary" style="font-size: 0.8rem;" disabled>
+                Edit Selected
+              </button>
+              <button id="btn-pick-edge-style" class="btn-secondary" style="font-size: 0.8rem;" disabled>
+                Apply to Edge
+              </button>
+            </div>
+          </details>
+          <!-- End edge curves -->
+        </details>
+        <!-- End view parameters -->
+
+      </div>
+    </div>
+
+    <div id="curve-editor-modal"
+      style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; background: rgba(0,0,0,0.8); align-items: center; justify-content: center;">
+      <div
+        style="background: #222; padding: 20px; border-radius: 8px; width: 600px; display: flex; flex-direction: column; gap: 16px; border: 1px solid #444;">
+        <h3 style="margin: 0;">Edit Curve Style</h3>
+        <p style="font-size: 0.8rem; color: #888; margin: 0;">p0 is (0,0), pLast is (1,0). Click to add control points.
+          Drag to move.</p>
+        <div style="position: relative; width: 560px; height: 700px; background: #333; border: 1px solid #555;">
+          <canvas id="curve-editor-canvas" width="560" height="700"></canvas>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+          <button id="btn-curve-cancel" class="btn-secondary">Cancel</button>
+          <button id="btn-curve-save" class="btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+    <div id="run-ui-container"
+      style="position: absolute; top: 24px; right: 24px; width: 200px; z-index: 10; display: flex; flex-direction: column; gap: 16px; pointer-events: none;">
+      <details class="controls-panel" style="pointer-events: auto; max-height: 90vh;" open>
+        <summary style="font-weight: 600; cursor: pointer; user-select: none; margin-bottom: 8px;">Inverse Design
+        </summary>
+        <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px; width: 100%;">
+          <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px; width: 100%;">
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; cursor: pointer;">
+            <input type="checkbox" id="chk-split-screen" />
+            Split Screen
+          </label>
+          <div id="target-mesh-drop-zone" class="upload-box"
+            style="width: 100%; padding: 8px; border-style: dashed; margin-top: 8px; cursor: pointer;">
+            <div class="upload-hint" style="font-size: 0.7rem;">Drop Target OBJ</div>
+          </div>
+          <span
+                style="display: inline-flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; flex: 1;">
+            <button id="btn-mesh-to-pattern" class="btn-primary"
+              style="width: 100%; font-size: 0.8rem;">
+              Mesh to Pattern
+            </button>
+            <span class="mesh-to-pattern-help" aria-label="Mesh to Pattern help">
+              ?
+              <span class="mesh-to-pattern-help-tooltip">
+                Convert the target mesh into a deployable pattern based on its graph topology. Uses the target mesh UVs
+                or parameterizes the mesh for the initial embedding.
+              </span>
+            </span>
+          </span>
+          <div class="divider"></div>
+
+          </div>
+
+          <div class="control-group" style="flex-direction: column; align-items: flex-start; overflow-y: auto; overflow-x: hidden; max-height: 70vh; gap: 8px; width: 100%; min-height: 0;">
+          <!-- Lifting controls -->
+          <div style="width: 100%; margin-top: 8px;">
+            <!-- <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <span style="font-size: 0.8rem; width: 60px;">Dep Angle:</span>
+              <input type="number" id="deployed-angle" value="0" step="1"
+                style="width: 60px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+            </div> -->
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <span style="font-size: 0.8rem; width: 60px;">Scale:</span>
+              <input type="range" id="scale-slider" style="width: 50%;" min="0.1" max="10" value="1" step="0.1" />
+              <input type="number" id="scale" value="1" step="0.1"
+                style="width: 30%; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <span style="font-size: 0.8rem; width: 60px;">Rotation:</span>
+              <input type="range" id="rotation" style="width: 40%;" min="0" max="360" value="0" />
+              <input type="number" id="rotation-val" value="0" step="0.1"
+                style="width: 30%; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+            </div>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; cursor: pointer;">
+              <input type="checkbox" id="chk-intersect-boundary" />
+              Intersect Boundary
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; cursor: pointer;">
+              <input type="checkbox" id="chk-remove-single-neighbor" checked />
+              Remove faces with single hinge
+            </label>
+            <button id="btn-lift" class="btn-primary" style="width: 100%; font-size: 0.8rem; margin-top: 8px;" disabled>
+              Lift
+            </button>
+          </div>
+
+          <div class="divider"></div>
+          <!-- Optimization controls -->
+          <div style="width: 100%;">
+            <button id="btn-optimize-init" class="btn-primary" style="width: 100%; font-size: 0.8rem;">
+              Init optimization
+            </button>
+            <button id="btn-optimize-start" class="btn-primary"
+              style="width: 100%; font-size: 0.8rem; margin-top: 16px;">
+              Start optimization
+            </button>
+          </div>
+          <details id="optimization-stats" style="width: 100%; margin-top: 16px; font-size: 0.8rem; display: none;"
+            open>
+            <summary style="cursor: pointer; user-select: none; margin-bottom: 8px;">Optimization Stats</summary>
+            <div style="display: flex; flex-direction: column; gap: 4px; padding-left: 8px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span>Rigid Max (Rel):</span>
+                <span id="opt-stat-rigid-max">0.00</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span>Rigid Avg (Rel):</span>
+                <span id="opt-stat-rigid-avg">0.00</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span>Planar Max (deg):</span>
+                <span id="opt-stat-planar-max">0.00</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span>Planar Avg (deg):</span>
+                <span id="opt-stat-planar-avg">0.00</span>
+              </div>
+            </div>
+          </details>
+
+          <details style="width: 100%; margin-top: 8px;">
+            <summary style="font-size: 0.8rem; cursor: pointer; user-select: none; margin-bottom: 8px;">Optimization
+              Params</summary>
+            <div style="display: flex; flex-direction: column; gap: 8px; padding-left: 8px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 0.8rem;">Rigid:</span>
+                <input type="number" id="opt-param-rigid" step="0.1"
+                  style="width: 60px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 0.8rem;">Closeness:</span>
+                <input type="number" id="opt-param-closeness" step="0.01"
+                  style="width: 60px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 0.8rem;">Planarity:</span>
+                <input type="number" id="opt-param-planarity" step="0.1"
+                  style="width: 60px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-size: 0.8rem;">Close Init:</span>
+                <input type="number" id="opt-param-close-init" step="0.1"
+                  style="width: 60px; font-size: 0.8rem; padding: 4px; border-radius: 4px; border: 1px solid #444; background: #222; color: white;">
+              </div>
+            </div>
+          </details>
+          <div class="divider"></div>
+          <button id="btn-export-fabrication-svg" class="btn-primary" style="width: 100%; font-size: 0.8rem;">
+            Export Fabrication
+          </button>
+          <button id="btn-export-optimized-meshes" class="btn-primary"
+            style="width: 100%; font-size: 0.8rem; margin-top: 8px;">
+            Export Optimized Meshes
+          </button>
+        </div>
+      </details>
+    </div>
+
+    <div id="main-layout" style="display: flex; width: 100%; height: 100%;">
+      <div id="canvas-container" style="flex: 1; position: relative; min-width: 0;">
+        <canvas id="canvas"></canvas>
+      </div>
+      <div id="split-view-container"
+        style="flex: 1; display: none; position: relative; background: #111; border-left: 1px solid #333;">
+        <div id="split-view-content" style="width: 100%; height: 100%;"></div>
+      </div>
+    </div>
+
+
+  </div>
+</body>
+
+</html>
